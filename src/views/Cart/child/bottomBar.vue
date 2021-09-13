@@ -9,20 +9,21 @@
       <span>全选</span>
     </div>
     <div class="price">合计:{{totalPrice}}</div>
-    <div class="calculate">去计算({{length}})</div>
+    <div class="calculate" @click="gosettlement">去计算({{length}})</div>
   </div>
 </template>
 
 <script>
 import CheckButton from 'components/context/Check/CheckButton'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapState} from 'vuex'
 export default {
   name: 'bottomBar',
   components: {
     CheckButton
   },
   computed: {
-    ...mapGetters(['Cartdata']),
+    ...mapGetters(['Cartdata','CartNumber']),
+    ...mapState(['cargoodList']),
     totalPrice() {
       return "￥" + 
       this.Cartdata.filter(item => {
@@ -49,6 +50,15 @@ export default {
         this.Cartdata.forEach(item => item.checked = false)
       } else { //部分选中或者全部没选中
         this.Cartdata.forEach(item => item.checked = true)
+      }
+    },
+    gosettlement() {
+      console.log(this.CartNumber)
+      if(this.CartNumber == 0) {
+        this.$toast.Show('请选择商品,再结算')
+      } else {
+        this.$toast.Show('结算成功,祝您生活愉快')
+        this.$store.state.cargoodList = []
       }
     }
   }

@@ -37,6 +37,8 @@ import Scroll from 'components/common/scroll/Scroll'
 import {ListerMixins,BackTopMixins} from 'common/mixins'
 import { mapActions } from 'vuex'
 
+
+
 import { 
   getDetail,
   Goods,
@@ -56,7 +58,7 @@ export default {
     DeCommonInfo,
     GoodList,
     BottomBar,
-    Scroll
+    Scroll,
   },
   mixins:[ListerMixins,BackTopMixins],
   data() {
@@ -247,7 +249,7 @@ export default {
       //2.将商品先保存到vuex中
       // this.$store.dispatch('addCart',prodoct)
       this.addCart(prodoct).then(res=> {
-        console.log(res)
+        this.$toast.Show(res,2000)
       })
     }
   }
