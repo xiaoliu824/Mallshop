@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 const Home = () => import('../views/Home/Home')
 const Category = () => import('../views/Category/Category')
 const Cart = () => import('../views/Cart/Cart')
-const Profile = () => import('../views/Profile/Profile')
+const person = () => import('../views/User/UserInfo')
 const Detail = () =>import('../views/detail/Detail')
 
 //解决导航中的vue-route重复点报错问题
@@ -32,8 +32,8 @@ const routes = [
     component:Cart
   },
   {
-    path:'/profile',
-    commponent: Profile
+    path:'/peruser',
+    component:person
   },
   {
     path: '/detail/:iid',
