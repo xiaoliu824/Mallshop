@@ -6,3 +6,14 @@ export function getLeftMenu() {
     url: '/category'
   })
 }
+
+//获取各个分类条目下的衣服品种
+//maitKey(分类的bm)
+export function getSubcategory(maitKey) {
+  return request({
+    url: '/subcategory',
+    params: {
+      maitKey
+    }
+  })
+}

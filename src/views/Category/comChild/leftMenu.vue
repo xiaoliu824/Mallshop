@@ -3,7 +3,10 @@
     <div class="menu-list">
       <div
        class="menu-list-item"
-       v-for="(item,index) in categories" :key="index" 
+       v-for="(item,index) in categories" 
+       :key="index" 
+       :class="{active: index === curIndex}"
+       @click="ItemClick(index)"
       >
       {{item.title}}
       </div>
@@ -24,6 +27,18 @@ export default {
       default() {
         return []
       }
+    }
+  },
+  data() {
+    return {
+      curIndex:0
+    }
+  },
+  methods: {
+    ItemClick(index) {
+      console.log(index)
+      this.curIndex = index
+      this.$emit('Selectindex',index)
     }
   }
 }
