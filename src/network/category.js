@@ -17,3 +17,14 @@ export function getSubcategory(maitKey) {
     }
   })
 }
+
+//获取pop、new、sell下的商品
+export function getCategoryDetail(miniWallkey,type) {
+  return request({
+    url: '/subcategory/detail',
+    params: {
+      miniWallkey,
+      type
+    }
+  })
+}

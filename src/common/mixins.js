@@ -1,4 +1,5 @@
 import {debounce} from './until'
+import {POP,NEW,SELL} from './const'
 //处理推荐商品和goodsItem商品加载完成的事件监听
 export const ListerMixins = {
   data() {
@@ -40,4 +41,29 @@ export const BackTopMixins = {
       this.isBacktopShow = position >BACKTOP_DISTANCE
     }
   },
+}
+
+export const TabControlMixin = {
+  data() {
+    return {
+      currentType: POP
+    }
+  },
+  methods: {
+    tabClick(index) {
+      console.log(index)
+      switch(index) {
+        case 0: 
+        this.currentType = POP
+        break;
+        case 1:
+        this.currentType = NEW
+        break;
+        case 2:
+        this.currentType = SELL
+        break;
+      }
+      console.log(this.currentType)
+    }
+  }
 }

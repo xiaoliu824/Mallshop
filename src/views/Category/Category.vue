@@ -11,6 +11,10 @@
        ref="Scroll"
       >
         <TabContentcate :contentCate = "ShowSubcategory"/>
+        <TabControl :titles="['综合','新品','销量']"
+         @tabClick = "tabClick"
+        />
+        <Tabcategory :categorydetail = "ShowCatedetails" />
       </Scroll>
     </div>
   </div>
@@ -19,13 +23,18 @@
 <script>
  import leftMenu from './comChild/leftMenu'
  import TabContentcate from './comChild/TabContentcate'
+ import Tabcategory from './comChild/Tabcategory.vue'
 
  import NavBar from 'components/common/navbar/NavBar'
+ import TabControl from 'components/context/TabControl/TabControl'
  import Scroll from 'components/common/scroll/Scroll'
 
- import {getLeftMenu,getSubcategory} from 'network/category'
+ import {getLeftMenu,getSubcategory,getCategoryDetail} from 'network/category'
+ import { TabControlMixin } from 'common/mixins'
+ import { POP, NEW, SELL } from "common/const"
 export default {
   name:'Category',
+  mixins: [TabControlMixin],
   data() {
     return {
       categories:[],
@@ -37,13 +46,19 @@ export default {
     leftMenu,
     TabContentcate,
     NavBar,
+    TabControl,
+    Tabcategory,
     Scroll
   },
   computed: {
     ShowSubcategory() {
       if(this.currentIndex === -1) return {}
       return this.categoryData[this.currentIndex].subcategories
-    }
+    },
+    ShowCatedetails() {
+      if(this.currentIndex === -1) return {}
+      return this.categoryData[this.currentIndex].categoryDetail[this.currentType]
+  },
   },
   created() {
     this.getMenudata()
@@ -53,12 +68,17 @@ export default {
       getLeftMenu().then(res => {
         //1.获取左边栏的商品分类数据
         this.categories = res.data.data.category.list
-        // console.log(this.categories)
+        console.log(this.categories)
 
         //2.初始化每个类别的子数据 (子数据一组一组取,因为数据量过大)
         for(let i = 0;i< this.categories.length; i++) {
           this.categoryData[i] = {
             subcategories:{}, //各个分类条目下的衣服品种
+            categoryDetail: {
+              pop:[],
+              new: [],
+              sell: [],
+            }
           }
         }
 
@@ -76,13 +96,28 @@ export default {
         this.categoryData[index].subcategories = res.data.data
         //整合16个分类下的所有数据
         this.categoryData = {...this.categoryData}
-        console.log(this.categoryData)
+        // console.log(this.categoryData)
+        this.getCateDetails(POP)
+        this.getCateDetails(SELL)
+        this.getCateDetails(NEW)
       })
     },
     //根据分类条目的点击拉取对应的数据
     Selectindex(index) {
-      console.log(index)
+      // console.log(index)
       this.getSubcategory(index)
+    },
+    //获取new、pop、sell的商品的方法
+    getCateDetails(type) {
+      // 1.获取请求的miniWallkey
+      const miniWallkey = this.categories[this.currentIndex].miniWallkey
+      //2. 发送请求,传入miniWallkey,type
+      getCategoryDetail(miniWallkey,type).then(res=> {
+        this.categoryData[this.currentIndex].categoryDetail[type] = res.data
+        console.log(res.data)
+        this.categoryData = {...this.categoryData}
+        // console.log(this.categoryData)
+      })
     }
   },
 
